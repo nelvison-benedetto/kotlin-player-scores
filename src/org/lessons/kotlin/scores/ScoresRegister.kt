@@ -9,12 +9,26 @@ class ScoresRegister {
 
     private val scoresMap: MutableMap<String, Scores> = mutableMapOf()
 
-    fun searchScores(theidconfirmedplayer:String):Unit{
-        val targetscores = scoresMap[theidconfirmedplayer];
-        if(targetscores!=null){
-            targetscores.getScoresPlayer();
-        }else {
-            println("Scores of the target player not found.");
+    fun createScores(idplayercreated:String, username:String):Unit{
+        if(scoresMap.containsKey(idplayercreated)){
+            println("Scores already existing.");
+            searchScores(idplayercreated);
         }
+        else{
+            val newscores = Scores(username, score=0, playingtime=0);
+            scoresMap[idplayercreated] = newscores;
+            searchScores(idplayercreated);  //also without this.
+        }
+        //BETTER logic, avoid redundancy containsKey+put
+        //scoresMap.putIfAbsent(idPlayerCreated, Scores(username, score = 0, playingtime = 0))
+        // ?.also { println("Scores already exist.") } // safe condition
+        // ?: searchScores(idPlayerCreated) // elvis operator
+    }
+    fun getScoresPlayer(idplayer:String):Scores? {  //return res or NULL!
+        return scoresMap[idplayer];
+    }
+    fun searchScores(theconfirmedidplayer:String):Unit{
+        scoresMap[theconfirmedidplayer]?.printScoresPlayer() ?: println("Scores of the target player not found.");
+           //primo ?(senza ':', è 'safe call') se è !=null continua con .printScoresPlayer(), altrimenti passa a :?(elvis operator)!
     }
 }

@@ -4,21 +4,19 @@ import kotlin.collections.HashMap
 
 class PlayerRegister {
     val id: String = UUID.randomUUID().toString();  //unique id(128bit)
-    val players = HashMap<String, Player>();  //O(1), accesso diretto con Id
+    val playersMap = HashMap<String, Player>();  //O(1), accesso diretto con Id, INFO ALL MAPS(hash,mutable,ect) IN JAVA!
 
-    fun createPlayer(name:String, lastname:String, nationality:String, googleaccount:String, phonenumber:Int):Unit{
-        val player = Player(name,lastname,nationality,googleaccount,phonenumber);
-        players[player.getIdPlayer()] = player;  //add in hashmap
+    fun createPlayer(name: String, lastname: String, nationality: String, googleaccount: String, phonenumber: Int): String{
+        val player = Player(name, lastname, nationality, googleaccount, phonenumber)  // Rimosso regPlayers, regScores
+        playersMap[player.getIdPlayer()] = player;
+        return player.getIdPlayer();
     }
     fun searchPlayer(theid:String):String{
-        val targetplayer = players[theid];
-        if(targetplayer!=null){
-            val confirmedidplayer = targetplayer.getIdPlayer();
-            println("Id confermato esistente: $confirmedidplayer")
-            val confirmedplayer = targetplayer;
-            return confirmedidplayer;
-        }else{
-            println("Player not found. Returning to home...")
-        }
+        return playersMap[theid]?.getIdPlayer()?:"";
+    }
+    fun printAllPlayers():Unit{
+        playersMap.forEach{(key,value)->
+            println("Id: $key, Player: $value");
+        };
     }
 }
